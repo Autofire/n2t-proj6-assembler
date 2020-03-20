@@ -26,7 +26,7 @@ public class CodeSegment {
             throw new NullPointerException("Code segment cannot take null instructions");
         }
         else {
-            System.out.println("Now in code segment: " + newInstruction.toString());
+            System.out.println("Adding code:  " + newInstruction.toString());
             instructions.add(newInstruction);
         }
     }

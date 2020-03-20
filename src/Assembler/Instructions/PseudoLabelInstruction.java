@@ -20,6 +20,7 @@ public class PseudoLabelInstruction implements PseudoInstruction {
 
     @Override
     public void apply(SymbolTable table, int instructionNumber) {
+
         table.addLabel(label, instructionNumber);
     }
 }
