@@ -38,6 +38,7 @@ public class Main {
 
             try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 
+                System.out.println("Running preprocessor...");
                 String line = br.readLine();
                 while(line != null) {
                     //InstructionParser.parse(line);
@@ -46,8 +47,12 @@ public class Main {
                     line = br.readLine();
                 }
 
-                // TODO output the resulting program
-                thisProgram.toBinary(null);
+                System.out.println();
+                System.out.println("Running parser...");
+                String outputFileName = inputFileName.replaceFirst("\\.asm$", ".hack");
+                try(PrintStream writer = new PrintStream(outputFileName)) {
+                    thisProgram.toBinary(writer);
+                }
             }
             catch (FileNotFoundException e) {
                 //e.printStackTrace();

@@ -102,7 +102,7 @@ public class SymbolTable {
             if (label.matches("^-?[0-9]+$")) {
                 type = SymbolType.Literal;
             }
-            else if(label.matches("^[a-zA-Z][0-9a-zA-Z_]*$")) {
+            else if(label.matches("^[a-zA-Z].*$")) {
                 type = SymbolType.Named;
             }
         }

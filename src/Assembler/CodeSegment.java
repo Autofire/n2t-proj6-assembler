@@ -3,6 +3,7 @@ package Assembler;
 import Assembler.Instructions.ConcreteInstruction;
 
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Vector;
 
@@ -40,10 +41,10 @@ public class CodeSegment {
         return instructions.size();
     }
 
-    public void toBinary(OutputStream stream, SymbolTable symbols) {
+    public void toBinary(PrintStream stream, SymbolTable symbols) {
         for(ConcreteInstruction i : instructions) {
-            // TODO Make this use the output stream
             System.out.println(i.toBinary(symbols) + "  " + i.toString());
+            stream.println(i.toBinary(symbols));
         }
     }
 }

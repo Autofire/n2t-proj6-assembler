@@ -6,6 +6,7 @@ import Assembler.Instructions.InstructionParser;
 import Assembler.Instructions.PseudoInstruction;
 
 import java.io.OutputStream;
+import java.io.PrintStream;
 
 /**
  * This represents the program as a whole. You feed this lines from
@@ -41,7 +42,7 @@ public class Program {
      * feeding every line in.
      * @param stream Stream where the binary output is fed.
      */
-    public void toBinary(OutputStream stream) {
+    public void toBinary(PrintStream stream) {
         code.toBinary(stream, symbols);
     }
 }
