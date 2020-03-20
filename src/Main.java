@@ -1,4 +1,7 @@
+import Assembler.Instructions.Instruction;
 import Assembler.Instructions.InstructionParser;
+
+import java.io.*;
 
 public class Main {
 
@@ -27,6 +30,33 @@ public class Main {
         // We have a shared symbol table between both steps. If we
         // try to fetch a missing symbol, it can grow automatically.
 
+        if(args.length == 1) {
+            String inputFileName = args[0];
+            File file = new File(inputFileName);
+
+            try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+
+                String line = br.readLine();
+                while(line != null) {
+                    InstructionParser.Parse(line);
+
+                    line = br.readLine();
+                }
+            }
+            catch (FileNotFoundException e) {
+                //e.printStackTrace();
+                System.out.println("Couldn't open for reading: " + inputFileName);
+            }
+            catch (IOException e) {
+                System.out.println("Failed to read file");
+            }
+
+        }
+        else {
+            System.out.println("Usage: Main input.asm [output.hack]");
+        }
+        //File file = new File(args[1]);
+        /*
         InstructionParser.Parse("");
         InstructionParser.Parse("// This file is part of www.nand2tetris.org");
         InstructionParser.Parse("// and the book The Elements of Computing Systems");
@@ -54,5 +84,6 @@ public class Main {
         InstructionParser.Parse("(INFINITE_LOOP)");
         InstructionParser.Parse("@INFINITE_LOOP");
         InstructionParser.Parse("0;JMP            // infinite loop");
+         */
     }
 }
