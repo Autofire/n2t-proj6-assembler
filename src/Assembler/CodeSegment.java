@@ -21,11 +21,12 @@ public class CodeSegment {
      * @param newInstruction Instruction to add.
      * @throws NullPointerException if newInstruction is null.
      */
-    public void Add(ConcreteInstruction newInstruction) {
+    public void add(ConcreteInstruction newInstruction) {
         if(newInstruction == null) {
             throw new NullPointerException("Code segment cannot take null instructions");
         }
         else {
+            System.out.println("Now in code segment: " + newInstruction.toString());
             instructions.add(newInstruction);
         }
     }
@@ -35,11 +36,11 @@ public class CodeSegment {
      * Intended to be used when labels are found.
      * @return Index a new instruction would get.
      */
-    public int NextInstructionNumber() {
+    public int nextInstructionNumber() {
         return instructions.size();
     }
 
-    public void WriteOut(OutputStream stream, SymbolTable symbols) {
+    public void toBinary(OutputStream stream, SymbolTable symbols) {
         // TODO
     }
 }

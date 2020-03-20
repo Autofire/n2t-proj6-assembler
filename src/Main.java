@@ -1,5 +1,4 @@
-import Assembler.Instructions.Instruction;
-import Assembler.Instructions.InstructionParser;
+import Assembler.Program;
 
 import java.io.*;
 
@@ -34,14 +33,19 @@ public class Main {
             String inputFileName = args[0];
             File file = new File(inputFileName);
 
+            Program thisProgram = new Program();
+
             try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 
                 String line = br.readLine();
                 while(line != null) {
-                    InstructionParser.Parse(line);
+                    //InstructionParser.parse(line);
+                    thisProgram.receiveLine(line);
 
                     line = br.readLine();
                 }
+
+                // TODO output the resulting program
             }
             catch (FileNotFoundException e) {
                 //e.printStackTrace();
@@ -57,33 +61,33 @@ public class Main {
         }
         //File file = new File(args[1]);
         /*
-        InstructionParser.Parse("");
-        InstructionParser.Parse("// This file is part of www.nand2tetris.org");
-        InstructionParser.Parse("// and the book The Elements of Computing Systems");
-        InstructionParser.Parse("// by Nisan and Schocken, MIT Press.");
-        InstructionParser.Parse("// File name: projects/06/max/Max.asm");
-        InstructionParser.Parse("");
-        InstructionParser.Parse("// Computes R2 = max(R0, R1)  (R0,R1,R2 refer to RAM[0],RAM[1],RAM[2])");
-        InstructionParser.Parse("");
-        InstructionParser.Parse("@R0");
-        InstructionParser.Parse("D=M              // D = first number");
-        InstructionParser.Parse("@R1");
-        InstructionParser.Parse("D=D-M            // D = first number - second number");
-        InstructionParser.Parse("@OUTPUT_FIRST");
-        InstructionParser.Parse("D;JGT            // if D>0 (first is greater) goto output_first");
-        InstructionParser.Parse("@R1");
-        InstructionParser.Parse("D=M              // D = second number");
-        InstructionParser.Parse("@OUTPUT_D");
-        InstructionParser.Parse("0;JMP            // goto output_d");
-        InstructionParser.Parse("(OUTPUT_FIRST)");
-        InstructionParser.Parse("@R0");
-        InstructionParser.Parse("D=M              // D = first number");
-        InstructionParser.Parse("(OUTPUT_D)");
-        InstructionParser.Parse("@R2");
-        InstructionParser.Parse("M=D              // M[2] = D (greatest number)");
-        InstructionParser.Parse("(INFINITE_LOOP)");
-        InstructionParser.Parse("@INFINITE_LOOP");
-        InstructionParser.Parse("0;JMP            // infinite loop");
+        InstructionParser.parse("");
+        InstructionParser.parse("// This file is part of www.nand2tetris.org");
+        InstructionParser.parse("// and the book The Elements of Computing Systems");
+        InstructionParser.parse("// by Nisan and Schocken, MIT Press.");
+        InstructionParser.parse("// File name: projects/06/max/Max.asm");
+        InstructionParser.parse("");
+        InstructionParser.parse("// Computes R2 = max(R0, R1)  (R0,R1,R2 refer to RAM[0],RAM[1],RAM[2])");
+        InstructionParser.parse("");
+        InstructionParser.parse("@R0");
+        InstructionParser.parse("D=M              // D = first number");
+        InstructionParser.parse("@R1");
+        InstructionParser.parse("D=D-M            // D = first number - second number");
+        InstructionParser.parse("@OUTPUT_FIRST");
+        InstructionParser.parse("D;JGT            // if D>0 (first is greater) goto output_first");
+        InstructionParser.parse("@R1");
+        InstructionParser.parse("D=M              // D = second number");
+        InstructionParser.parse("@OUTPUT_D");
+        InstructionParser.parse("0;JMP            // goto output_d");
+        InstructionParser.parse("(OUTPUT_FIRST)");
+        InstructionParser.parse("@R0");
+        InstructionParser.parse("D=M              // D = first number");
+        InstructionParser.parse("(OUTPUT_D)");
+        InstructionParser.parse("@R2");
+        InstructionParser.parse("M=D              // M[2] = D (greatest number)");
+        InstructionParser.parse("(INFINITE_LOOP)");
+        InstructionParser.parse("@INFINITE_LOOP");
+        InstructionParser.parse("0;JMP            // infinite loop");
          */
     }
 }

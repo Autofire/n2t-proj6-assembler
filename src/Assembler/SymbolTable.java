@@ -52,7 +52,11 @@ public class SymbolTable {
         else if(symbols.containsKey(labelName)) {
             throw new IllegalArgumentException("Cannot override existing symbol");
         }
+        else if(determineSymbolType(labelName) != SymbolType.Named) {
+            throw new IllegalArgumentException("Labels must be a name");
+        }
         else {
+            System.out.println("Adding label: " + labelName + "(" + instructionIndex + ")");
             symbols.put(labelName, instructionIndex);
         }
     }
@@ -62,15 +66,48 @@ public class SymbolTable {
      * one is created at the next available address. If the symbol
      * is supposed to match a label instead of a variable, add it
      * with addLabel.
-     * @param labelName Name of label to fetch/create.
+     *
+     * This will also correctly handle immediate values.
+     * @param symbol Name of symbol to fetch/create.
      * @return The value associated with the label.
      */
-    public int fetchSymbol(String labelName) {
-        if(!symbols.containsKey(labelName)) {
-            symbols.put(labelName, nextAvailableAddress);
-            nextAvailableAddress++;
+    public int getValue(String symbol) {
+
+        SymbolType type = determineSymbolType(symbol);
+
+        if(type == SymbolType.Named) {
+            if (!symbols.containsKey(symbol)) {
+                symbols.put(symbol, nextAvailableAddress);
+                nextAvailableAddress++;
+            }
+
+            return symbols.get(symbol);
+        }
+        else if(type == SymbolType.Literal) {
+            return Integer.parseInt(symbol);
+        }
+        else {
+            throw new IllegalArgumentException("Invalid symbol: " + symbol);
+        }
+    }
+
+    private enum SymbolType {
+        Named, Literal, Invalid
+    }
+
+    private static SymbolType determineSymbolType(String label) {
+        SymbolType type = SymbolType.Invalid;
+
+        if(label != null) {
+            if (label.matches("^-?[0-9]+$")) {
+                type = SymbolType.Literal;
+            }
+            else if(label.matches("^[a-zA-Z][0-9a-zA-Z_]*$")) {
+                type = SymbolType.Named;
+            }
         }
 
-        return symbols.get(labelName);
+        return type;
     }
+
 }

@@ -13,7 +13,7 @@ public final class InstructionParser {
      * @param line Line of code to parse.
      * @return The equivalent instruction object or null.
      */
-    public static Instruction Parse(String line) {
+    public static Instruction parse(String line) {
 
         // We could say "This will be null by default" or something,
         // but we want to make sure that this gets defined by some
@@ -25,20 +25,19 @@ public final class InstructionParser {
         line = line.strip().split("//")[0];
 
         if(line.isEmpty()) {
-            System.out.println("Blank: " + line);
+            //System.out.println("Blank: " + line);
             result = null;
         }
         else if(line.startsWith("(") && line.endsWith(")")) {
-            System.out.println("Label:  " + line);
+            //System.out.println("Label:  " + line);
             result = new PseudoLabelInstruction(line);
         }
         else if(line.startsWith("@")) {
-            System.out.println("A type: " + line);
+            //System.out.println("A type: " + line);
             result = new ConcreteAddressingInstruction(line);
         }
         else {
-            //throw new IllegalArgumentException("Syntax error: " + line);
-            System.out.println("C type: " + line);
+            //System.out.println("C type: " + line);
             result = new ConcreteComputeInstruction(line);
         }
 

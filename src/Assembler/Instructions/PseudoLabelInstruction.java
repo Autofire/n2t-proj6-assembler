@@ -15,11 +15,11 @@ public class PseudoLabelInstruction implements PseudoInstruction {
      * @param line The entire line of code.
      */
     PseudoLabelInstruction(String line) {
-
+        label = line.substring(1, line.length()-1);
     }
 
     @Override
     public void apply(SymbolTable table, int instructionNumber) {
-        throw new RuntimeException("Not ready");
+        table.addLabel(label, instructionNumber);
     }
 }
