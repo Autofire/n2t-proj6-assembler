@@ -42,6 +42,6 @@ public class Program {
      * @param stream Stream where the binary output is fed.
      */
     public void toBinary(OutputStream stream) {
-
+        code.toBinary(stream, symbols);
     }
 }

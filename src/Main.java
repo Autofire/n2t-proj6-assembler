@@ -5,6 +5,7 @@ import java.io.*;
 public class Main {
 
     public static void main(String[] args) {
+
         // Alright, so there are two parts to a program:
         //  1. The instructions. These can be labelled and referred to
         //  2. The variables. These their own space in memory
@@ -46,6 +47,7 @@ public class Main {
                 }
 
                 // TODO output the resulting program
+                thisProgram.toBinary(null);
             }
             catch (FileNotFoundException e) {
                 //e.printStackTrace();

@@ -41,6 +41,9 @@ public class CodeSegment {
     }
 
     public void toBinary(OutputStream stream, SymbolTable symbols) {
-        // TODO
+        for(ConcreteInstruction i : instructions) {
+            // TODO Make this use the output stream
+            System.out.println(i.toBinary(symbols) + "  " + i.toString());
+        }
     }
 }
