@@ -51,9 +51,9 @@ public class ConcreteComputeInstruction implements ConcreteInstruction {
         comp = line.strip();
     }
 
-    private String bitSetToString(BitSet bits, final int BIT_COUNT) {
+    private String bitSetToString(BitSet bits, final int bitCount) {
         StringBuilder s = new StringBuilder();
-        for( int i = 0; i < BIT_COUNT;  i++ )
+        for( int i = 0; i < bitCount;  i++ )
         {
             if(i < bits.length()) {
                 s.append(bits.get(i) == true ? 1 : 0);
@@ -67,7 +67,111 @@ public class ConcreteComputeInstruction implements ConcreteInstruction {
     }
 
     private String compBinary() {
-        return "0000000";
+        // Using ALU codes here.
+        // Note that D is fed into X and A/M is fed into Y
+        final int BIT_COUNT = 7;
+        final int  A = 0;
+        final int ZX = 1;
+        final int NX = 2;
+        final int ZY = 3;
+        final int NY = 4;
+        final int  F = 5;
+        final int NO = 6;
+
+        BitSet bits = new BitSet(BIT_COUNT);
+
+        // First, we'll just record whether what's being used.
+        // This makes future checks simpler. Again, we're
+        // referring to D and A/M by their ALU input names,
+        // so X=D, and either Y=A or Y=M.
+        boolean hasX = comp.contains("D");
+        boolean hasY = comp.matches(".*[AM].*");
+
+        // we'll handle the A bit; if we're using M in
+        // the comp part, we definitely want this set.
+        // The only other possibilities is that we are using
+        // the A register (so then A bit is 0) or we are using
+        // neither A nor M (and then it doesn't matter).
+        if(comp.contains("M")) {
+            bits.set(A);
+        }
+
+        // Alright, from here, we have 4 possibilities:
+        //  1. Both X and Y
+        //  2. Neither X nor Y
+        //  3. Just X
+        //  4. Just Y
+        //
+        // Cases 1 and 2 have a lot of unique possibilities
+        // which we'll handle directly. Cases 3 and 4 have a
+        // lot in common so they'll get handled together.
+        if(hasX && hasY) {
+            // Ok, so we're working with the format X?Y, where
+            // ? is the operator.
+            switch(comp.charAt(1)) {
+                case '+':
+                    bits.set(F);    // addition
+                    break;
+
+                case '-':
+                    bits.set(F);    // addition
+                    bits.set(NO);   // negate result
+                    if(comp.matches("D-[AM]")) {
+                        bits.set(NX);
+                    }
+                    else {
+                        bits.set(NY);
+                    }
+                    break;
+
+                case '&':
+                    // Nothing to be done; all zeroes
+                    break;
+
+                case '|':
+                    bits.set(NX);
+                    bits.set(NY);
+                    bits.set(NO);
+                    break;
+            }
+        }
+        else if(!hasX && !hasY) {
+            bits.set(ZX);
+            bits.set(ZY);
+            bits.set(F);
+
+            // We don't need a condition for 0 because no
+            // extra bits need to be set for it.
+            if(comp.equals("1")) {
+                bits.set(NX);
+                bits.set(NY);
+                bits.set(NO);
+            }
+            else if(comp.equals("-1")) {
+                bits.set(NX);
+            }
+        }
+        else {
+            // First, there's some general things we can deduce from
+            // the comp string: If it is missing D or A/M, we can zero
+            // and negate their inputs.
+            bits.set(ZX, !hasX);
+            bits.set(NX, !hasX);
+            bits.set(ZY, !hasY);
+            bits.set(NY, !hasY);
+
+            switch(comp.charAt(0)) {
+                case '!':
+                    bits.set(NO);
+                    break;
+                case '-':
+                    bits.set(F);
+                    bits.set(NO);
+                    break;
+            }
+        }
+
+        return bitSetToString(bits, 7);
     }
 
     private String destBinary() {
@@ -123,7 +227,7 @@ public class ConcreteComputeInstruction implements ConcreteInstruction {
     @Override
     public String toBinary(SymbolTable table) {
         String prefix = "111";
-        return prefix + " " + compBinary() + " " + destBinary() + " " + jumpBinary();
+        return String.join("", prefix, compBinary(), destBinary(), jumpBinary());
     }
 
     @Override
@@ -138,6 +242,6 @@ public class ConcreteComputeInstruction implements ConcreteInstruction {
             result = result + ";" + jump;
         }
 
-        return result + "     " + toBinary(null);
+        return result;
     }
 }
