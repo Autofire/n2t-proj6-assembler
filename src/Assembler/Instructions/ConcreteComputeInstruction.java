@@ -160,14 +160,33 @@ public class ConcreteComputeInstruction implements ConcreteInstruction {
             bits.set(ZY, !hasY);
             bits.set(NY, !hasY);
 
-            switch(comp.charAt(0)) {
-                case '!':
+            if(comp.length() == 2) {
+                switch(comp.charAt(0)) {
+                    case '!':
+                        bits.set(NO);
+                        break;
+                    case '-':
+                        bits.set(F);
+                        bits.set(NO);
+                        break;
+                }
+            }
+            else if(comp.length() == 3) {
+                // In this branch, we're either incrementing
+                // or decrementing something. Thus, we always add.
+                bits.set(F);
+
+                if(comp.endsWith("+1")) {
                     bits.set(NO);
-                    break;
-                case '-':
-                    bits.set(F);
-                    bits.set(NO);
-                    break;
+
+                    // We're being a little redundant here,
+                    // but in the case of a '+', both always
+                    // get negated.
+                    bits.set(NX);
+                    bits.set(NY);
+                }
+
+                // Nothing needs to be done for -1
             }
         }
 
@@ -213,11 +232,11 @@ public class ConcreteComputeInstruction implements ConcreteInstruction {
             }
 
             if(jump.matches("(JLT|JNE|JLE|JMP)")) {
-                bits.set(J_EQ);
+                bits.set(J_LT);
             }
 
             if(jump.matches("(JEQ|JGE|JLE|JMP)")) {
-                bits.set(J_LT);
+                bits.set(J_EQ);
             }
         }
 
